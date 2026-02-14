@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
-import Loader from "./loader.tsx";
+import Loader from "./Loader.tsx";
 import FormContact from "./FormContact.tsx";
 import ListContact from "./ListContact.tsx";
 
@@ -52,6 +52,7 @@ export default function App() {
       <h2>Lista de contactos</h2>
       <FormContact onAgregar={agregarContacto} />
       <ListContact contactos={contactos} onEliminar={eliminarContacto} />
+      <img src="/icon.png"></img>
     </>
   );
 }
