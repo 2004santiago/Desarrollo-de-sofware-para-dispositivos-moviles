@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import "./App.css";
+import Loader from "./loader.tsx";
+import FormContact from "./FormContact.tsx";
+import ListContact from "./ListContact.tsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+type Contacto = {
+  id: number;
+  nombre: string;
+  telefono: string;
+};
+
+export default function App() {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [contactos, setContactos] = useState<Contacto[]>([]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setContactos([
+        { id: 1, nombre: "Ana", telefono: "3001234567" },
+        { id: 2, nombre: "Carlos", telefono: "3109876543" },
+      ]);
+      setLoading(false);
+    }, 1000);
+
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  const agregarContacto = (nombre: string, telefono: string) => {
+    const nuevo: Contacto = {
+      id: Date.now(),
+      nombre,
+      telefono,
+    };
+    setContactos((prev) => [...prev, nuevo]);
+  };
+
+  const eliminarContacto = (id: number) => {
+    setContactos((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  if (loading) return <Loader />;
 
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
+        <a href="https://react.dev" target="_blank" rel="noreferrer">
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h2>Lista de contactos</h2>
+      <FormContact onAgregar={agregarContacto} />
+      <ListContact contactos={contactos} onEliminar={eliminarContacto} />
     </>
-  )
+  );
 }
-
-export default App
