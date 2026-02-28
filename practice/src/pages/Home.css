@@ -1,0 +1,50 @@
+.page-container {
+  max-width: 520px;   /* ajusta a gusto */
+  margin: 0 auto;     /* centra */
+  padding: 16px;
+  text-align: center; /* si quieres mantener el título/ícono centrado */
+}
+
+/* Que el form ocupe el ancho del contenedor */
+.page-container ion-input,
+.page-container ion-list,
+.page-container ion-item {
+  width: 100%;
+}
+
+/* Solo el botón principal (AGREGAR) a ancho completo */
+.page-container .btn-agregar {
+  width: 100%;
+}
+
+/* Botón X pequeño */
+.page-container .btn-delete {
+  width: auto;
+  min-width: 36px;
+  height: 36px;
+}
+
+/* Ícono de abajo */
+.home-icon {
+  width: 192px;
+  height: 192px;
+  display: block;
+  margin: 16px auto 0;
+}
+
+.page-container ion-item {
+  --background: transparent;
+  --background-activated: transparent;
+  --background-focused: transparent;
+  --ripple-color: transparent;
+}
+
+
+.page-container ion-input {
+  margin-top: 10px;
+}
+
+.page-container .btn-agregar {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}

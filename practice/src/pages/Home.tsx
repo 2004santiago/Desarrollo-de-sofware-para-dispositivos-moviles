@@ -1,46 +1,47 @@
-// pages/Home.tsx
 import { useEffect, useState } from 'react'
 import reactLogo from '../assets/react.svg'
-import '../App.css'
+import './Home.css'
 import Loader from '../Loader'
-import FormContact from '../FormContact'
 import ListContact from '../ListContact'
+import { useHistory } from 'react-router-dom'
 
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonImg } from '@ionic/react'
-
-type Contacto = {
-  id: number
-  nombre: string
-  telefono: string
-}
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonImg, IonButton } from '@ionic/react'
+import { deleteContact, getContacts, Contacto } from '../services/storage'
 
 export default function Home() {
   const [loading, setLoading] = useState<boolean>(true)
   const [contactos, setContactos] = useState<Contacto[]>([])
+  const history = useHistory()
+
+  const load = () => {
+    setContactos(getContacts())
+  }
 
   useEffect(() => {
+    // carga inicial
     const timer = window.setTimeout(() => {
-      setContactos([
-        { id: 1, nombre: 'Ana', telefono: '3001234567' },
-        { id: 2, nombre: 'Carlos', telefono: '3109876543' },
-      ])
+      load()
       setLoading(false)
-    }, 1000)
+    }, 300)
 
     return () => window.clearTimeout(timer)
   }, [])
 
-  const agregarContacto = (nombre: string, telefono: string) => {
-    const nuevo: Contacto = {
-      id: Date.now(),
-      nombre,
-      telefono,
-    }
-    setContactos((prev) => [...prev, nuevo])
-  }
+  // cada vez que vuelves a Home (por back) recarga
+  useEffect(() => {
+    const unlisten = history.listen((location) => {
+      if (location.pathname === '/home') load()
+    })
+    return () => unlisten()
+  }, [history])
 
   const eliminarContacto = (id: number) => {
-    setContactos((prev) => prev.filter((c) => c.id !== id))
+    deleteContact(id)
+    load()
+  }
+
+  const editarContacto = (id: number) => {
+    history.push(`/edit/${id}`)
   }
 
   if (loading) return <Loader />
@@ -54,27 +55,24 @@ export default function Home() {
       </IonHeader>
 
       <IonContent>
-        <div>
-          <a href="https://react.dev" target="_blank" rel="noreferrer">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
+        <div className="page-container">
+          <div>
+            <a href="https://react.dev" target="_blank" rel="noreferrer">
+              <img src={reactLogo} className="logo react" alt="React logo" />
+            </a>
+          </div>
+
+          <h2>Lista de contactos</h2>
+
+          <IonButton className="btn-agregar" onClick={() => history.push('/create')}>
+            Agregar contacto
+          </IonButton>
+
+          <ListContact contactos={contactos} onEliminar={eliminarContacto} onEditar={editarContacto} />
+
+          <IonImg src="/icon.png" className="home-icon" />
         </div>
-
-        <h2>Lista de contactos</h2>
-
-        <FormContact onAgregar={agregarContacto} />
-        <ListContact contactos={contactos} onEliminar={eliminarContacto} />
-
-        <IonImg
-          src="/icon.png"
-          style={{
-            width: '192px',
-            height: '192px',
-            display: 'block',
-            margin: '0 auto'
-          }}
-        />      
-        </IonContent>
+      </IonContent>
     </IonPage>
   )
 }
