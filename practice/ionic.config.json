@@ -1,7 +1,0 @@
-{
-  "name": "practice",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react-vite"
-}
