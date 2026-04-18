@@ -39,13 +39,11 @@ function Home() {
       requestPermission();
     }
   }, [user]);
-
   useEffect(() => {
     return () => {
       if (stillTimer.current) clearInterval(stillTimer.current);
     };
   }, []);
-
   useEffect(() => {
     if (!mission3Active || missions[2].completed) return;
 
@@ -80,11 +78,9 @@ function Home() {
       if (stillTimer.current) clearInterval(stillTimer.current);
     };
   }, [accel, mission3Active]);
-
   const notify = ({ id, title, body }: { id: number; title: string; body: string }) => {
     schedule({ id, title, body });
   };
-
   const calcDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
     const R = 6371000;
     const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -96,7 +92,6 @@ function Home() {
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
-
   const startMission1 = async () => {
     try {
       const dataUrl = await takePhoto();
@@ -108,7 +103,6 @@ function Home() {
       setShowAlert(true);
     }
   };
-
   const startMission2 = async () => {
     if (mission2Active || missions[1].completed) return;
     setMission2Active(true);
@@ -164,7 +158,6 @@ function Home() {
   };
   const completedCount = missions.filter(m => m.completed).length;
   const progress = completedCount / missions.length;
-
   return (
     <IonPage>
       <IonHeader>
@@ -175,28 +168,23 @@ function Home() {
           </IonButton>
         </IonToolbar>
       </IonHeader>
-
       <IonContent className="ion-padding">
         <IonText color="medium">
           <p style={{ margin: '0 0 4px' }}>{user?.email}</p>
         </IonText>
-
         <IonText>
           <h2 style={{ margin: '0 0 4px' }}>Puntos: {points}</h2>
         </IonText>
-
         <p style={{ margin: '0 0 8px' }}>
           {completedCount} / {missions.length} misiones completadas
         </p>
         <IonProgressBar value={progress} color="primary" />
-
         <IonList style={{ marginTop: 16 }}>
           <MissionCard
             mission={missions[0]}
             onStart={startMission1}
             disabled={missions[0].completed}
           />
-
           <MissionCard
             mission={missions[1]}
             onStart={startMission2}
@@ -207,7 +195,6 @@ function Home() {
               <p style={{ paddingLeft: 16 }}>Rastreando</p>
             </IonText>
           )}
-
           <MissionCard
             mission={missions[2]}
             onStart={startMission3}
@@ -221,7 +208,6 @@ function Home() {
             </IonText>
           )}
         </IonList>
-
         <IonButton
           expand="block"
           routerLink="/results"
@@ -229,7 +215,6 @@ function Home() {
         >
           Ver resultados
         </IonButton>
-
         <IonAlert
           isOpen={showAlert}
           onDidDismiss={() => setShowAlert(false)}

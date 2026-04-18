@@ -6,7 +6,6 @@ export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-
   const login = async (email, password) => {
     const result = await signInWithEmailAndPassword(auth, email, password);
     setUser(result.user);
