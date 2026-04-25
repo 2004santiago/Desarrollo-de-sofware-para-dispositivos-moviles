@@ -1,50 +1,29 @@
-import {
-  IonPage, IonHeader, IonToolbar, IonTitle,
-  IonContent, IonButton, IonButtons, IonBackButton,
-  IonText
-} from "@ionic/react";
+import PageLayout from "../components/PageLayout";
 import { useHaptics } from "../hooks/useHaptics";
+import { AppButton, StatusMessage } from "../components/ui";
 
 function HapticsPage() {
   const { isAvailable, impact, notify, vibrate } = useHaptics();
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start"><IonBackButton defaultHref="/home" /></IonButtons>
-          <IonTitle>Haptics</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    <PageLayout title="Haptics">
+      <div className="space-y-4">
+        <StatusMessage tone={isAvailable ? "success" : "danger"}>
+          {isAvailable ? "Haptics disponible" : "Haptics no disponible"}
+        </StatusMessage>
 
-      <IonContent className="ion-padding">
-        <IonText color={isAvailable ? "success" : "danger"}>
-          <p>{isAvailable ? "✅ Haptics disponible" : "❌ Haptics no disponible"}</p>
-        </IonText>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <AppButton onClick={() => impact("light")}>Impacto suave</AppButton>
+          <AppButton onClick={() => impact("medium")} variant="secondary">Impacto medio</AppButton>
+          <AppButton onClick={() => impact("heavy")} variant="warning">Impacto fuerte</AppButton>
+          <AppButton onClick={() => notify("success")} variant="success">Notificacion exito</AppButton>
+          <AppButton onClick={() => notify("warning")} variant="warning">Notificacion advertencia</AppButton>
+          <AppButton onClick={() => notify("error")} variant="danger">Notificacion error</AppButton>
+        </div>
 
-        <IonButton expand="block" onClick={() => impact("light")}>
-          Impacto Suave
-        </IonButton>
-        <IonButton expand="block" onClick={() => impact("medium")}>
-          Impacto Medio
-        </IonButton>
-        <IonButton expand="block" onClick={() => impact("heavy")}>
-          Impacto Fuerte
-        </IonButton>
-        <IonButton expand="block" color="success" onClick={() => notify("success")}>
-          Notificación Éxito
-        </IonButton>
-        <IonButton expand="block" color="warning" onClick={() => notify("warning")}>
-          Notificación Advertencia
-        </IonButton>
-        <IonButton expand="block" color="danger" onClick={() => notify("error")}>
-          Notificación Error
-        </IonButton>
-        <IonButton expand="block" onClick={() => vibrate(200)}>
-          Vibrar 200ms
-        </IonButton>
-      </IonContent>
-    </IonPage>
+        <AppButton onClick={() => vibrate(200)} variant="secondary">Vibrar 200ms</AppButton>
+      </div>
+    </PageLayout>
   );
 }
 

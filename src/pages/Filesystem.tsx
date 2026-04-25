@@ -1,10 +1,7 @@
-import {
-  IonPage, IonHeader, IonToolbar, IonTitle,
-  IonContent, IonButton, IonButtons, IonBackButton,
-  IonText, IonItem, IonLabel
-} from "@ionic/react";
 import { useState } from "react";
+import PageLayout from "../components/PageLayout";
 import { useFilesystem } from "../hooks/useFilesystem";
+import { AppButton, DataCard } from "../components/ui";
 
 function FilesystemPage() {
   const { writeFile, readFile, deleteFile, listFiles, loading } = useFilesystem();
@@ -36,49 +33,36 @@ function FilesystemPage() {
   };
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start"><IonBackButton defaultHref="/home" /></IonButtons>
-          <IonTitle>Filesystem</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent className="ion-padding">
-        <IonButton expand="block" onClick={handleWrite} disabled={loading}>
-          Escribir archivo
-        </IonButton>
-        <IonButton expand="block" onClick={handleRead} disabled={loading}>
-          Leer archivo
-        </IonButton>
-        <IonButton expand="block" onClick={handleList} disabled={loading}>
-          Listar archivos
-        </IonButton>
-        <IonButton expand="block" color="danger" onClick={handleDelete} disabled={loading}>
-          Eliminar archivo
-        </IonButton>
+    <PageLayout title="Filesystem">
+      <div className="space-y-5">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <AppButton onClick={handleWrite} disabled={loading}>Escribir archivo</AppButton>
+          <AppButton onClick={handleRead} disabled={loading} variant="secondary">Leer archivo</AppButton>
+          <AppButton onClick={handleList} disabled={loading} variant="warning">Listar archivos</AppButton>
+          <AppButton onClick={handleDelete} disabled={loading} variant="danger">Eliminar archivo</AppButton>
+        </div>
 
         {fileContent && (
-          <>
-            <h3>Contenido del archivo:</h3>
-            <IonItem><IonLabel>Nombre: {fileContent.nombre}</IonLabel></IonItem>
-            <IonItem><IonLabel>Curso: {fileContent.curso}</IonLabel></IonItem>
-            <IonItem><IonLabel>Fecha: {fileContent.fecha}</IonLabel></IonItem>
-          </>
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-white">Contenido del archivo</h3>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <DataCard label="Nombre" value={fileContent.nombre} />
+              <DataCard label="Curso" value={fileContent.curso} />
+              <DataCard label="Fecha" value={fileContent.fecha} />
+            </div>
+          </div>
         )}
 
         {files.length > 0 && (
-          <>
-            <h3>Archivos:</h3>
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-white">Archivos</h3>
             {files.map((file: any, i) => (
-              <IonItem key={i}>
-                <IonLabel>{file.name}</IonLabel>
-              </IonItem>
+              <DataCard key={i} label={`Archivo ${i + 1}`} value={file.name} />
             ))}
-          </>
+          </div>
         )}
-      </IonContent>
-    </IonPage>
+      </div>
+    </PageLayout>
   );
 }
 

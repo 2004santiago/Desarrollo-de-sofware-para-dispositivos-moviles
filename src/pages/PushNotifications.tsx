@@ -1,55 +1,31 @@
-import {
-  IonPage, IonHeader, IonToolbar, IonTitle,
-  IonContent, IonButton, IonButtons, IonBackButton,
-  IonItem, IonLabel, IonText
-} from "@ionic/react";
+import PageLayout from "../components/PageLayout";
 import { usePushNotifications } from "../hooks/usePushNotifications";
+import { AppButton, DataCard, StatusMessage } from "../components/ui";
 
 function PushNotificationsPage() {
   const { token, notification, error, requestPermission } = usePushNotifications();
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start"><IonBackButton defaultHref="/home" /></IonButtons>
-          <IonTitle>Push Notifications</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent className="ion-padding">
-        <IonButton expand="block" onClick={requestPermission}>
-          Activar Push Notifications
-        </IonButton>
+    <PageLayout title="Push Notifications">
+      <div className="space-y-4">
+        <AppButton onClick={requestPermission}>Activar push notifications</AppButton>
 
         {token && (
-          <IonItem>
-            <IonLabel className="ion-text-wrap">
-              <h3>Token del dispositivo:</h3>
-              <p>{token}</p>
-            </IonLabel>
-          </IonItem>
+          <DataCard label="Token del dispositivo" value={token} />
         )}
 
         {notification && (
-          <IonItem>
-            <IonLabel>
-              <h3>{notification.title}</h3>
-              <p>{notification.body}</p>
-            </IonLabel>
-          </IonItem>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <DataCard label="Titulo" value={notification.title} />
+            <DataCard label="Mensaje" value={notification.body} />
+          </div>
         )}
 
         {error && (
-          <IonText color="danger">
-            <p>{error.message}</p>
-          </IonText>
+          <StatusMessage tone="danger">{error.message}</StatusMessage>
         )}
-
-        <IonText color="medium">
-        </IonText>
-      </IonContent>
-    </IonPage>
+      </div>
+    </PageLayout>
   );
 }
 

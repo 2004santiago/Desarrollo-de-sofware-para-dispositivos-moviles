@@ -1,54 +1,39 @@
-import {
-  IonPage, IonHeader, IonToolbar, IonTitle,
-  IonContent, IonButton, IonButtons, IonBackButton,
-  IonText
-} from "@ionic/react";
+import PageLayout from "../components/PageLayout";
 import { useLocalNotifications } from "../hooks/useLocalNotifications";
+import { AppButton, StatusMessage } from "../components/ui";
 
 function LocalNotificationsPage() {
   const { permission, requestPermission, sendNotification, scheduleNotification } =
     useLocalNotifications();
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start"><IonBackButton defaultHref="/home" /></IonButtons>
-          <IonTitle>Local Notifications</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    <PageLayout title="Local Notifications">
+      <div className="space-y-4">
+        <StatusMessage>Permiso: {permission ?? "No verificado"}</StatusMessage>
 
-      <IonContent className="ion-padding">
-        <IonText>
-          <p>Permiso: {permission ?? "No verificado"}</p>
-        </IonText>
+        <AppButton onClick={requestPermission}>Solicitar permisos</AppButton>
 
-        <IonButton expand="block" onClick={requestPermission}>
-          Solicitar Permisos
-        </IonButton>
-
-        <IonButton
-          expand="block"
+        <AppButton
           onClick={() => sendNotification({
-            title: "¡Hola!",
-            body: "Esta es una notificación inmediata"
+            title: "Hola",
+            body: "Esta es una notificacion inmediata"
           })}
         >
           Enviar ahora
-        </IonButton>
+        </AppButton>
 
-        <IonButton
-          expand="block"
+        <AppButton
           onClick={() => scheduleNotification({
             title: "Recordatorio",
-            body: "Esta notificación fue programada",
+            body: "Esta notificacion fue programada",
             seconds: 5
           })}
+          variant="secondary"
         >
           Programar en 5 segundos
-        </IonButton>
-      </IonContent>
-    </IonPage>
+        </AppButton>
+      </div>
+    </PageLayout>
   );
 }
 

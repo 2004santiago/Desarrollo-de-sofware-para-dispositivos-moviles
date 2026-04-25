@@ -1,35 +1,24 @@
-import {
-  IonPage, IonHeader, IonToolbar, IonTitle,
-  IonContent, IonButton, IonButtons, IonBackButton
-} from "@ionic/react";
+import PageLayout from "../components/PageLayout";
 import { useCamera } from "../hooks/useCamera";
+import { AppButton } from "../components/ui";
 
 function CameraPage() {
   const { photo, takePhoto } = useCamera();
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start"><IonBackButton defaultHref="/home" /></IonButtons>
-          <IonTitle>Camera</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent className="ion-padding">
-        <IonButton expand="block" onClick={takePhoto}>
-          Tomar Foto
-        </IonButton>
+    <PageLayout title="Camera">
+      <div className="space-y-4">
+        <AppButton onClick={takePhoto}>Tomar foto</AppButton>
 
         {photo && (
           <img
             src={photo}
             alt="foto"
-            style={{ marginTop: "16px", width: "100%", borderRadius: "8px" }}
+            className="w-full rounded-2xl border border-white/10 object-cover shadow-lg"
           />
         )}
-      </IonContent>
-    </IonPage>
+      </div>
+    </PageLayout>
   );
 }
 

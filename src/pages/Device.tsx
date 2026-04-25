@@ -1,57 +1,29 @@
-import {
-  IonPage, IonHeader, IonToolbar, IonTitle,
-  IonContent, IonButtons, IonBackButton,
-  IonItem, IonLabel, IonButton, IonSpinner
-} from "@ionic/react";
+import PageLayout from "../components/PageLayout";
 import { useDevice } from "../hooks/useDevice";
+import { AppButton, DataCard, StatusMessage } from "../components/ui";
 
 function DevicePage() {
   const { battery, info, deviceId, loading, refresh } = useDevice();
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start"><IonBackButton defaultHref="/home" /></IonButtons>
-          <IonTitle>Device</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent className="ion-padding">
+    <PageLayout title="Device">
+      <div className="space-y-4">
         {loading ? (
-          <IonSpinner name="crescent" />
+          <StatusMessage>Cargando informacion del dispositivo...</StatusMessage>
         ) : (
-          <>
-            <IonItem>
-              <IonLabel>
-                Batería: {battery ? `${(battery.batteryLevel * 100).toFixed(0)}%` : "N/A"}
-              </IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>
-                Cargando: {battery?.isCharging ? "Sí" : "No"}
-              </IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Modelo: {info?.model}</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Plataforma: {info?.platform}</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>OS: {info?.operatingSystem}</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>ID: {deviceId}</IonLabel>
-            </IonItem>
-          </>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <DataCard label="Bateria" value={battery ? `${(battery.batteryLevel * 100).toFixed(0)}%` : "N/A"} />
+            <DataCard label="Cargando" value={battery?.isCharging ? "Si" : "No"} />
+            <DataCard label="Modelo" value={info?.model ?? "N/A"} />
+            <DataCard label="Plataforma" value={info?.platform ?? "N/A"} />
+            <DataCard label="OS" value={info?.operatingSystem ?? "N/A"} />
+            <DataCard label="ID" value={deviceId ?? "N/A"} />
+          </div>
         )}
 
-        <IonButton expand="block" onClick={refresh} style={{ marginTop: "16px" }}>
-          Actualizar
-        </IonButton>
-      </IonContent>
-    </IonPage>
+        <AppButton onClick={refresh}>Actualizar</AppButton>
+      </div>
+    </PageLayout>
   );
 }
 
